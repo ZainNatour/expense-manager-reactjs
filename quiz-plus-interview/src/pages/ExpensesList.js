@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app"; // Import Firebase
-import "firebase/compat/firestore"; // Import Firestore
-import { firebaseConfig } from "../firebase"; // Import your Firebase configuration
+import { firestore } from "../firebase";
 import { Link as RouterLink } from "react-router-dom";
 
 // styling
@@ -35,13 +34,9 @@ const ExpensesList = () => {
 
   useEffect(() => {
     // Initialize Firebase if it's not already initialized
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
 
     const fetchExpenses = async () => {
       try {
-        const firestore = firebase.firestore(); // Create a reference to Firestore
         const expensesCollection = await firestore.collection("expenses").get();
         const expensesData = expensesCollection.docs.map((doc) => ({
           id: doc.id,
