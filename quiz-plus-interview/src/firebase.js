@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import firebase from "firebase/compat/app";
+import { getFirestore } from "firebase/firestore";
 import "firebase/compat/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -20,8 +20,7 @@ export const firebaseConfig = {
 };
 
 // Initialize Firebase
-if (!firebase.apps.length) {
-  initializeApp(firebaseConfig);
-}
-export const firestore = firebase.firestore();
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
 // const analytics = getAnalytics(app);
+export { app, firestore };

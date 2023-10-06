@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { firestore } from "../firebase";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+import { firebaseConfig } from "../firebase";
 import { useParams } from "react-router-dom";
 
 import { Container, Typography, TextField, Button } from "@mui/material";
@@ -12,6 +14,9 @@ const StyledForm = styled("form")({
 });
 
 function EditExpense() {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
   const { id } = useParams(); // Get the expense ID from the URL parameter
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
@@ -21,6 +26,7 @@ function EditExpense() {
   useEffect(() => {
     const fetchExpense = async () => {
       try {
+        const firestore = firebase.firestore();
         const expenseDoc = await firestore.collection("expenses").doc(id).get();
 
         if (expenseDoc.exists) {
@@ -63,6 +69,7 @@ function EditExpense() {
     }
 
     try {
+      const firestore = firebase.firestore();
       await firestore
         .collection("expenses")
         .doc(id)

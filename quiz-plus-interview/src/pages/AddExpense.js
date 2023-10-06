@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { firestore } from "../firebase";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+import { firebaseConfig } from "../firebase";
 import { Container, Typography, TextField, Button } from "@mui/material";
 import styled from "@emotion/styled";
 const StyledForm = styled("form")({
@@ -9,7 +11,10 @@ const StyledForm = styled("form")({
   gap: "1rem",
 });
 
-function AddExpense() {
+export default function AddExpense() {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
@@ -28,6 +33,7 @@ function AddExpense() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const firestore = firebase.firestore();
 
     // Check if date is not empty and is a valid date format
     if (!date || isNaN(new Date(date))) {
@@ -85,5 +91,3 @@ function AddExpense() {
     </Container>
   );
 }
-
-export default AddExpense;

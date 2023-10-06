@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app"; // Import Firebase
-import { firestore } from "../firebase";
 import { Link as RouterLink } from "react-router-dom";
+import { firebaseConfig } from "../firebase";
+import "firebase/compat/firestore"; // Import Firestore
 
 // styling
 import {
@@ -34,9 +35,13 @@ const ExpensesList = () => {
 
   useEffect(() => {
     // Initialize Firebase if it's not already initialized
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
 
     const fetchExpenses = async () => {
       try {
+        const firestore = firebase.firestore();
         const expensesCollection = await firestore.collection("expenses").get();
         const expensesData = expensesCollection.docs.map((doc) => ({
           id: doc.id,
